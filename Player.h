@@ -7,7 +7,7 @@ class Player :
     public GameObject
 {
 	int hWalkModel_;  //歩きモーションのモデルハンドル
-	int hIdleModel_;  //大気アニメーションのモデルハンドル
+	int hIdleModel_;  //待機アニメーションのモデルハンドル
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
