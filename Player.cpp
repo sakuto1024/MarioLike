@@ -3,6 +3,8 @@
 #include "Engine/Debug.h"
 #include "Engine\\Input.h"
 #include "Engine\\Debug.h"
+#include "Ground.h"
+#include <vector>
 
 namespace
 {
@@ -43,10 +45,19 @@ namespace
 
 	PLAYER_DIRECTION turnEndDirection = PLAYER_DOWN;  //回転終了時の向きを管理する変数
 
-	void TurnDireFlip(float s, float e)
+	float AdjustAngle(float angle)
 	{
+		if (angle > 180.0f)
+		{
+			angle = angle - 360.0f;
+		}
+		else if (angle < -180.0f)
+		{
+			angle = angle + 360.0f;
+		}
+
+		return angle;
 	}
-	
 }
 
 Player::Player(GameObject* parent)
@@ -67,41 +78,9 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	//if (Input::IsKey(DIK_A))
-	//{
-	//	transform_.rotate_.y -= 2.0f;
-	//}
-	//if (Input::IsKey(DIK_D))
-	//{
-	//	transform_.rotate_.y += 2.0f;
-	//}
-
-
-	//XMVECTOR vPos = XMLoadFloat3(&transform_.position_);  //ロード：読み込み
-	//XMMATRIX mRotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));  //Y軸回転行列を作る
-	////XMVector3TransformCoordは、ベクトルを行列で変換する関数。回転行列をベクトルにかけると、回転したベクトルを得られる
-	//XMVECTOR vMove = XMVector3TransformCoord(vFront, mRotY);
-
-	//if (Input::IsKey(DIK_W))
-	//{
-	//	vPos = vPos + moveSpeed * vMove;
-
-	//	XMStoreFloat3(&transform_.position_, vPos);  //ストア：書き込み (格納)
-	//}
-
-	//transform_.rotate_.y +=1;
-	//static float angle = 0.0;
-	//angle = angle + 0.3f;
-	//XMMATRIX scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-	//XMMATRIX rotateX = XMMatrixRotationX(XMConvertToRadians(angle));
-	//XMMATRIX rotate = XMMatrixRotationY(XMConvertToRadians(angle));
-	//XMMATRIX translate = XMMatrixTranslation(1.0f, 0.0f, 0.0f);
-
-	//SetWorldMatrix(scale *  rotate * translate);
-
 	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
 	XMVECTOR move = XMVectorSet(0, 0, 0, 0);
-	const float SPEED = 0.1;
+	const float SPEED = 0.3;
 	float angle = 0.0f;
 	static float turnFrame = 0.0f;  //回転中のフレーム数を管理する変数
 	
@@ -145,8 +124,11 @@ void Player::Update()
 		pState = PLAYER_STATE::PLAYER_TURN;
 		turnFrame = 0.0f;  //回転中のフレーム数をリセット
 		turnStartAngle = P_ANGLE[oldDir];  //現在の方向から
-		turnEndDirection = pDirection;  //入力方向に30フレームで回転する
-		turnEndAngle = P_ANGLE[turnEndDirection];  //
+		float diff = AdjustAngle(P_ANGLE[pDirection] - P_ANGLE[oldDir]);
+		//diffが正の値なら、右回転、負の値なら左回転
+		turnEndDirection = pDirection;//入力方向に３０フレームで回転する
+		//回転終了時の角度を計算する
+		turnEndAngle = turnStartAngle + diff;
 	}
 
 	Debug::Log("ROTATE = ");
@@ -164,11 +146,13 @@ void Player::Update()
 		{
 			t = 1.0f;  //1.0を超えないようにする(保険)
 		}
-		angle = turnStartAngle + (turnEndAngle - turnStartAngle) * t;
 
-		if (turnEndAngle - turnStartAngle > 180.0f) 
-		{
-		}
+		/*float tmpAngle = turnEndAngle - turnStartAngle;
+		tmpAngle = AdjustAngle(tmpAngle);
+
+		angle = turnStartAngle + tmpAngle * t;*/
+
+		angle = turnStartAngle + (turnEndAngle - turnStartAngle) *t;
 
 		transform_.rotate_.y = angle;
 		if (turnFrame >= TURN_FRAME)
@@ -188,6 +172,25 @@ void Player::Update()
 	
 	pos = pos + SPEED * move;
 	XMStoreFloat3(&transform_.position_, pos);
+
+	using std::vector;
+	vector<vector<int>> gmap = ground_->GetMapData();
+
+	XMFLOAT3 wPos = { -20.0f, 0.0f, 20.0f };
+
+	int mapX = (transform_.position_.x - wPos.x) / 4;
+	int mapZ = (-transform_.position_.z + wPos.z) / 4;
+
+	Debug::Log("X = ");
+	Debug::Log(mapX, true);  //後ろのtrueは改行するかどうか
+	Debug::Log("Z = ");
+	Debug::Log(mapZ, true);  //後ろのtrueは改行するかどうか
+
+	if (gmap[mapX][mapZ] == 1)
+	{
+		pos  = pos - SPEED * move;
+		XMStoreFloat3(&transform_.position_, pos);
+	}
 }
 
 void Player::Draw()

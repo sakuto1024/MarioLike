@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
+#include <vector>
 
 //テストシーンを管理するクラス
 class Ground : public GameObject
@@ -13,6 +14,8 @@ public:
 	//初期化
 	void Initialize() override;
 
+	std::vector<std::vector<int>> GetMapData() { return mapData_; }
+
 	//更新
 	void Update() override;
 
@@ -24,4 +27,6 @@ public:
 
 private:
 	int hModel_;
+
+	std::vector<std::vector<int>> mapData_;
 };

@@ -3,11 +3,11 @@
 
 
 
-class Player :
-    public GameObject
+class Ground;  //前方宣言（ポインタだけでいいときは前方宣言でOK)
+               //(Gound::～　とかやりたいときは前方宣言じゃダメ）
+
+class Player : public GameObject
 {
-	int hWalkModel_;  //歩きモーションのモデルハンドル
-	int hIdleModel_;  //待機アニメーションのモデルハンドル
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -24,5 +24,12 @@ public:
 
 	//開放
 	void Release() override;
+	void SetGround(Ground* ground) { ground_ = ground; }
+
+private:
+	int hWalkModel_;  //歩きモーションのモデルハンドル
+	int hIdleModel_;  //待機アニメーションのモデルハンドル
+
+	Ground* ground_;//地面オブジェクトのポインタ
 };
 
