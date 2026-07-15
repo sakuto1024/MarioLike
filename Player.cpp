@@ -74,6 +74,8 @@ void Player::Initialize()
 
 	hIdleModel_ = Model::Load("Idle.fbx");
 	Model::SetAnimFrame(hIdleModel_, 0, 839, 1.0);
+
+	transform_.position_ = { 1.0f, 0.0f, 2.0f };
 }
 
 void Player::Update()
@@ -186,7 +188,7 @@ void Player::Update()
 	Debug::Log("Z = ");
 	Debug::Log(mapZ, true);  //å„ÇÎÇÃtrueÇÕâ¸çsÇ∑ÇÈÇ©Ç«Ç§Ç©
 
-	if (gmap[mapX][mapZ] == 1)
+	if (gmap[mapZ][mapX] == 1)
 	{
 		pos  = pos - SPEED * move;
 		XMStoreFloat3(&transform_.position_, pos);
