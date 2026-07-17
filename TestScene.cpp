@@ -4,6 +4,7 @@
 #include "Engine\\Camera.h"
 #include "Enemy.h"
 #include <vector>
+#include "Food.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -16,7 +17,8 @@ void TestScene::Initialize()
 {	
 	//pWp = Instantiate<Weapon>(this);
 	//Player* pPlayer = Instantiate<Player>(this);
-	//Enemy* enemy = Instantiate<Enemy>(this);
+	//Enemy* enemys = Instantiate<Enemy>(this);
+	//enemys->SetPosition(XMFLOAT3(0.0f, 23.0f, -30.0f));
 	
 	Ground* pGround = Instantiate<Ground>(this);
 
@@ -38,12 +40,34 @@ void TestScene::Initialize()
 			{
 				Enemy* enemy = Instantiate<Enemy>(this);
 				enemy->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 0.0f, 18.0f - (4.0f * i) });
+				
 			}
+
+			if (gmap[i + 10][j] > 0)
+			{
+				
+				Food* food = Instantiate<Food>(this);
+				food->SetPosition({ -18.0f + (4.0f * j), 0.0f, 18.0f - (4.0f * i) });
+
+
+				if (gmap[i + 10][j] == 1)
+				{
+					food->SetFoodType(FoodType::FOODTYPE_NORMAL);
+				}
+
+				else if (gmap[i + 10][j] == 2)
+				{
+					food->SetFoodType(FoodType::FOODTYPE_POWER);
+				}
+
+			}
+
+			
 		}
 	}
 
-	Camera::SetPosition(XMFLOAT3(0.0f, 30.0f, -40.0f));
-	Camera::SetTarget(XMFLOAT3(0.0f, 0.0f, 0.0f));
+	//Camera::SetPosition(XMFLOAT3(0.0f, 30.0f, -40.0f));
+	//Camera::SetTarget(XMFLOAT3(0.0f, 0.0f, 0.0f));
 }
 
 //更新

@@ -2,13 +2,16 @@
 #include "Engine/Model.h"
 #include "Engine/Debug.h"
 #include "Engine/CsvReader.h"
+#include "Food.h"
 
 namespace
 {
 	int hModelB_;
 	int hModelF_;
+	int hModelFP_;
 	Transform bt;
 	Transform ft;
+	Transform fpt;
 
 	using std::vector;
 
@@ -37,6 +40,8 @@ Ground::Ground(GameObject* parent)
 
 	//mapData_を初期化 mapHeight_個のvector<int>の配列を作る
 	mapData_ = vector<vector<int>>(mapHeight_, vector<int>(mapWidth_, 0));  //ファイルグローバルのmapDataをコピーして、メンバ変数mapData_に格納
+	objMap_ = vector<vector<int>>(mapHeight_, vector<int>(mapWidth_, 0));
+
 
 	for (int x = 0; x < mapWidth_; x++)
 	{
@@ -45,6 +50,19 @@ Ground::Ground(GameObject* parent)
 			mapData_[y][x] = csvData.GetValue(x, y);
 		}
 	}
+
+	for (int x = 0; x < mapWidth_; x++)
+	{
+		for (int y = 0; y < mapHeight_; y++)
+		{
+			objMap_[y][x] = csvData.GetValue(x, y + 10); //CSVの値をobjMap_に格納
+		}
+	}
+
+
+	fpt.scale_.x *= 2.0f;
+	fpt.scale_.y *= 2.0f;
+	fpt.scale_.z *= 2.0f;
 }
 
 void Ground::Initialize()
@@ -55,6 +73,8 @@ void Ground::Initialize()
 	hModelB_ = Model::Load("BlueBrick.fbx");
 
 	hModelF_ = Model::Load("Feed.fbx");
+
+	hModelFP_ = Model::Load("FeedP.fbx");
 	
 	//bt.position_.x += -18.0f;
 	//.position_.z += 18.0f;
@@ -69,6 +89,7 @@ void Ground::Initialize()
 
 void Ground::Update()
 {
+	fpt.rotate_.y += 3.0f;
 }
 
 void Ground::Draw()
@@ -87,15 +108,33 @@ void Ground::Draw()
 				Model::SetTransform(hModelB_, bt);
 				Model::Draw(hModelB_);
 			}
+		}
+	}
 
-			if (mapData_[i + 10][j] == 1)
+
+	for (int j = 0; j < 10; j++)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			/*if (mapData_[i + 10][j] > 0)
 			{
-				ft.position_ = { -18.0f + (4.0f * j), 0.0f, 18.0f - (4.0f * i) };
 
-				Model::SetTransform(hModelF_, ft);
-				Model::Draw(hModelF_);
-			}
-		}	
+				Food* food = Instantiate<Food>(this);
+				food->SetPosition({ -18.0f + (4.0f * j), 0.0f, 18.0f - (4.0f * i) });
+
+
+				if (mapData_[i + 10][j] == 1)
+				{
+					food->SetFoodType(FoodType::FOODTYPE_NORMAL);
+				}
+
+				else if (mapData_[i + 10][j] == 2)
+				{
+					food->SetFoodType(FoodType::FOODTYPE_POWER);
+				}
+
+			}*/
+		}
 	}
 }
 

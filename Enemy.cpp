@@ -21,6 +21,7 @@ void Enemy::Initialize()
 //更新
 void Enemy::Update()
 {
+	transform_.position_.z += 0.1f;
 }
 
 //描画

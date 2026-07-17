@@ -29,6 +29,7 @@ private:
 	int hModel_;
 
 	std::vector<std::vector<int>> mapData_;
+	std::vector<std::vector<int>> objMap_;
 	int mapWidth_;
 	int mapHeight_;
 };

@@ -31,5 +31,13 @@ private:
 	int hIdleModel_;  //待機アニメーションのモデルハンドル
 
 	Ground* ground_;//地面オブジェクトのポインタ
+
+	int camType_;  //カメラの種類
+
+	void  SetFixedCam();  //固定カメラの処理
+
+
+
+
 };
 
