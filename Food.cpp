@@ -1,5 +1,8 @@
 #include "Food.h"
 #include "Engine/Model.h"
+#include "Ground.h"
+#include <vector>
+#include "TestScene.h"
 
 Food::Food(GameObject* parent)
 	:GameObject(parent, "Food"), type_(FOODTYPE_NORMAL), hModel_(-1), score_(0)
@@ -14,6 +17,20 @@ void Food::Initialize()
 {
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 1.0f, 0.0f), 0.3f);
 	AddCollider(collider);
+
+	/*using std::vector;
+	vector<vector<int>> gm = ground_->GetMapData();
+
+	for (int j = 0; j < 10; j++)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			if (gm[i][j] > 0)
+			{
+				maxFood_++;
+			}
+		}
+	}*/
 }
 
 void Food::Update()
@@ -61,7 +78,22 @@ void Food::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
+		TestScene* testScene = dynamic_cast<TestScene*>(FindObject("TestScene"));
+
+		if (type_ == FoodType::FOODTYPE_NORMAL)
+		{
+			testScene->AddScore(1);
+			testScene->DecMaxFoodN(1);
+		}
+		else if (type_ == FoodType::FOODTYPE_POWER)
+		{
+			testScene->AddScore(5);
+			testScene->DecMaxFoodP(1);
+		}
+
+		
+
 		KillMe();  //自分も消す
-		score_++;
+		
 	}
 }
