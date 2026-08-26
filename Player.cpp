@@ -300,6 +300,7 @@ void Player::Draw()
 
 void Player::Release()
 {
+	this->KillMe();
 }
 
 void Player::SetFixedCam()

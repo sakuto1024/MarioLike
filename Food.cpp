@@ -49,6 +49,7 @@ void Food::Draw()
 
 void Food::Release()
 {
+	this->KillMe();
 }
 
 void Food::SetFoodType(FoodType type)
