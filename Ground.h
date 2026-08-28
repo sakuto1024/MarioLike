@@ -25,6 +25,9 @@ public:
 	//開放
 	void Release() override;
 
+	int GetMapWidth() { return mapWidth_; }
+	int GetMapHeight() { return mapHeight_; }
+
 private:
 	int hModel_;
 

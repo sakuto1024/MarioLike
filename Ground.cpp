@@ -12,6 +12,7 @@ namespace
 	Transform bt;
 	Transform ft;
 	Transform fpt;
+	Transform gt;
 
 	using std::vector;
 
@@ -63,6 +64,12 @@ Ground::Ground(GameObject* parent)
 	fpt.scale_.x *= 2.0f;
 	fpt.scale_.y *= 2.0f;
 	fpt.scale_.z *= 2.0f;
+
+	//transform_.rotate_.x += -90.0f;
+	//transform_.position_.z += 8.0f;
+
+	gt.rotate_.x += -90.0f;
+	gt.position_.z += 8.0f;
 }
 
 void Ground::Initialize()
@@ -94,16 +101,21 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
-
-	for (int j = 0; j < 10; j++)
+	for (int k = 0; k < 5; k++)
 	{
-		for (int i = 0; i < 10; i++)
+		gt.position_ = { -4.0f + (40.0f * k), 0.0f, 8.0f };
+		Model::SetTransform(hModel_, gt);
+		Model::Draw(hModel_);
+	}
+	
+
+	for (int j = 0; j < mapWidth_; j++)
+	{
+		for (int i = 0; i < mapHeight_; i++)
 		{
 			if (mapData_[i][j] == 1)
 			{
-				bt.position_ = { -18.0f + (4.0f * j), -2.0f, 18.0f - (4.0f * i) };
+				bt.position_ = { -18.0f + (4.0f * j), 22.0f - (2.0f * i), 0.0f};
 
 				Model::SetTransform(hModelB_, bt);
 				Model::Draw(hModelB_);

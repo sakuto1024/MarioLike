@@ -63,8 +63,9 @@ namespace
 	XMVECTOR vFront = { 0, 0, 1, 0 }; //タンクの前方向ベクトル
 	const float moveSpeed = 0.1f;
 	const float CAM_HEIGHT_BIAS = 2.0f;  //カメラの高さのバイアス
-	const float TPSCAM_BIAS_Y = 3.0f;
-	const float TPSCAM_BIAS_Z = 10.0f;
+	const float TPSCAM_BIAS_Y = 12.0f;
+	const float TPSCAM_BIAS_Z = 40.0f;
+	const int INIT_CAMPOS_X = 12.0f;
 
 	enum CAM_TYPE
 	{
@@ -97,6 +98,8 @@ void Player::Initialize()
 
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0.0f, 1.0f, 0.0f), 2.0f);
 	AddCollider(collider);
+
+	camType_ = CAM_TYPE::TPS_CAM;
 }
 
 void Player::Update()
@@ -202,14 +205,14 @@ void Player::Update()
 	XMFLOAT3 wPos = { -20.0f, 0.0f, 20.0f };
 
 	int mapX = (transform_.position_.x - wPos.x) / 4;
-	int mapZ = (-transform_.position_.z + wPos.z) / 4;
+	int mapY = (-transform_.position_.y + wPos.y) / 4;
 
 	Debug::Log("X = ");
 	Debug::Log(mapX, true);  //後ろのtrueは改行するかどうか
-	Debug::Log("Z = ");
-	Debug::Log(mapZ, true);  //後ろのtrueは改行するかどうか
+	Debug::Log("Y = ");
+	Debug::Log(mapY, true);  //後ろのtrueは改行するかどうか
 
-	if (gmap[mapZ][mapX] == 1)
+	if (gmap[mapY][mapX] == 1)
 	{
 		pos  = pos - SPEED * move;
 		XMStoreFloat3(&transform_.position_, pos);
@@ -239,8 +242,19 @@ void Player::Update()
 		XMFLOAT3 camPos = transform_.position_;
 		camPos.y = camPos.y + TPSCAM_BIAS_Y;
 		camPos.z = camPos.z - TPSCAM_BIAS_Z;
+
+		if (transform_.position_.x < INIT_CAMPOS_X)
+		{
+			camPos.x = INIT_CAMPOS_X;
+			Camera::SetTarget(XMFLOAT3({ INIT_CAMPOS_X, transform_.position_.y + TPSCAM_BIAS_Y, transform_.position_.z }));
+		}
+		else
+		{
+			Camera::SetTarget(XMFLOAT3({ transform_.position_.x, transform_.position_.y + TPSCAM_BIAS_Y, transform_.position_.z }));
+		}
+
 		Camera::SetPosition(camPos);
-		Camera::SetTarget(XMFLOAT3(transform_.position_));
+	
 	}
 	break;
 
@@ -249,8 +263,12 @@ void Player::Update()
 		XMFLOAT3 camPos;  //タンクの位置をカメラの位置にする
 		XMVECTOR vCAM = { 0.0f, TPSCAM_BIAS_Y, -TPSCAM_BIAS_Z, 0.0f }; //カメラの位置をタンクの位置より少し後ろにする
 		vCAM = XMVector3TransformCoord(vCAM, mRotY);  //タンクの回転をカメラの位置に反映させる
+		
+		
+		
 		XMStoreFloat3(&camPos, vPos + vCAM);  //カメラの位置をタンクの位置に反映させる
-
+		
+		
 
 		//XMFLOAT3 camPos = transform_.position_;
 		//camPos.y = camPos.y - TPSCAM_BIAS_Y;
@@ -306,5 +324,5 @@ void Player::Release()
 void Player::SetFixedCam()
 {
 	Camera::SetTarget(XMFLOAT3(0, 0, 0));
-	Camera::SetPosition(XMFLOAT3(0, 30, -40));
+	Camera::SetPosition(XMFLOAT3(0, 0, -40));
 }

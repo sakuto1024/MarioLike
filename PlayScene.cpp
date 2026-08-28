@@ -24,14 +24,14 @@ void PlayScene::Initialize()
 	using std::vector;
 	vector<vector<int>> gmap = ground_->GetMapData();
 
-	for (int j = 0; j < 10; j++)
+	for (int j = 0; j < ground_->GetMapWidth(); j++)
 	{
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < ground_->GetMapHeight(); i++)
 		{
 			if (gmap[i][j] == 3)
 			{
 				player_ = Instantiate<Player>(this);
-				player_->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 0.0f, 18.0f - (4.0f * i) });
+				player_->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 20.0f - (4.0f * i), 0.0f });
 				player_->SetGround(ground_);
 			}
 
@@ -42,38 +42,38 @@ void PlayScene::Initialize()
 				enemy_->SetGround(ground_);
 			}
 
-			if (gmap[i + 10][j] > 0)
-			{
+			//if (gmap[i + 10][j] > 0)
+			//{
 
-				food_ = Instantiate<Food>(this);
-				food_->SetPosition({ -18.0f + (4.0f * j), 0.0f, 18.0f - (4.0f * i) });
+			//	food_ = Instantiate<Food>(this);
+			//	food_->SetPosition({ -18.0f + (4.0f * j), 0.0f, 18.0f - (4.0f * i) });
 
 
-				if (gmap[i + 10][j] == 1)
-				{
-					food_->SetFoodType(FoodType::FOODTYPE_NORMAL);
-					maxFoodN_++;
-				}
+			//	if (gmap[i + 10][j] == 1)
+			//	{
+			//		food_->SetFoodType(FoodType::FOODTYPE_NORMAL);
+			//		maxFoodN_++;
+			//	}
 
-				else if (gmap[i + 10][j] == 2)
-				{
-					food_->SetFoodType(FoodType::FOODTYPE_POWER);
-					maxFoodP_++;
-				}
+			//	else if (gmap[i + 10][j] == 2)
+			//	{
+			//		food_->SetFoodType(FoodType::FOODTYPE_POWER);
+			//		maxFoodP_++;
+			//	}
 
-			}
+			//}
 		}
 	}
 }
 
 void PlayScene::Update()
 {
-	if (maxFoodN_ == 0 && maxFoodP_ == 0)
-	{
-		//SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
-		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-	}
+	//if (maxFoodN_ == 0 && maxFoodP_ == 0)
+	//{
+	//	//SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	//	SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
+	//	pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+	//}
 }
 
 void PlayScene::Draw()
