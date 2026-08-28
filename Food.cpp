@@ -3,6 +3,7 @@
 #include "Ground.h"
 #include <vector>
 #include "TestScene.h"
+#include "PlayScene.h"
 
 Food::Food(GameObject* parent)
 	:GameObject(parent, "Food"), type_(FOODTYPE_NORMAL), hModel_(-1), score_(0)
@@ -79,17 +80,17 @@ void Food::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
-		TestScene* testScene = dynamic_cast<TestScene*>(FindObject("TestScene"));
+		PlayScene* playScene = dynamic_cast<PlayScene*>(FindObject("PlayScene"));
 
 		if (type_ == FoodType::FOODTYPE_NORMAL)
 		{
-			testScene->AddScore(1);
-			testScene->DecMaxFoodN(1);
+			playScene->AddScore(1);
+			playScene->DecMaxFoodN(1);
 		}
 		else if (type_ == FoodType::FOODTYPE_POWER)
 		{
-			testScene->AddScore(5);
-			testScene->DecMaxFoodP(1);
+			playScene->AddScore(5);
+			playScene->DecMaxFoodP(1);
 		}
 
 		

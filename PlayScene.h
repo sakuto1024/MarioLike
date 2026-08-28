@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include "Engine/Model.h"
 
 class Text;
 class Food;
@@ -8,32 +7,24 @@ class Player;
 class Enemy;
 class Ground;
 
-//ƒeƒXƒgƒV[ƒ“‚ğŠÇ—‚·‚éƒNƒ‰ƒX
-class TestScene : public GameObject
+//ãƒ†ã‚¹ãƒˆã‚·ãƒ¼ãƒ³ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
+class PlayScene : public GameObject
 {
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	//ˆø”Fparent  eƒIƒuƒWƒFƒNƒgiSceneManagerj
-	TestScene(GameObject* parent);
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	//å¼•æ•°ï¼šparent  è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆSceneManagerï¼‰
+	PlayScene(GameObject* parent);
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize() override;
 
-	//XV
+	//æ›´æ–°
 	void Update() override;
 
-	void TitleUpdate();
-	void GamePlayUpdate();
-	void ClearUpdate();
-	void GameOverUpdate();
-
-	void DrawStage();
-	void ReleaseStage();
-
-	//•`‰æ
+	//æç”»
 	void Draw() override;
 
-	//ŠJ•ú
+	//é–‹æ”¾
 	void Release() override;
 
 	void AddScore(int scr) { score_ += scr; }
@@ -49,15 +40,4 @@ private:
 	int maxFoodP_;
 	int maxFoodN_;
 	int score_;
-
-	enum SCENE_STATE
-	{
-		TITLE,
-		GAME_PLAY,
-		CLEAR,
-		GAME_OVER,
-		MAX_SCENE
-	};
-
-	SCENE_STATE scene_;
 };

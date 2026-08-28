@@ -75,7 +75,7 @@ void Ground::Initialize()
 	hModelF_ = Model::Load("Feed.fbx");
 
 	hModelFP_ = Model::Load("FeedP.fbx");
-	
+
 	//bt.position_.x += -18.0f;
 	//.position_.z += 18.0f;
 
@@ -84,7 +84,7 @@ void Ground::Initialize()
 	transform_.position_.x += 30.0f;
 	transform_.rotate_.x += -90.0f;*/
 
-	
+
 }
 
 void Ground::Update()

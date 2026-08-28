@@ -15,14 +15,14 @@ namespace
 }
 
 //コンストラクタ
-TestScene::TestScene(GameObject * parent)
+TestScene::TestScene(GameObject* parent)
 	: GameObject(parent, "TestScene"), score_(0)
 {
 }
 
 //初期化
 void TestScene::Initialize()
-{	
+{
 	//pWp = Instantiate<Weapon>(this);
 	//Player* pPlayer = Instantiate<Player>(this);
 	//Enemy* enemys = Instantiate<Enemy>(this);
@@ -32,7 +32,7 @@ void TestScene::Initialize()
 
 	pText_ = new Text;
 	pText_->Initialize();
-	
+
 	//Ground* pGround = Instantiate<Ground>(this);
 
 	//using std::vector;
@@ -86,7 +86,7 @@ void TestScene::Initialize()
 
 	//pText_ = new Text;
 	//pText_->Initialize();
-	
+
 }
 
 //更新
