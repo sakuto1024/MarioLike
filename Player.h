@@ -36,8 +36,8 @@ private:
 
 	void  SetFixedCam();  //ŒÅ’èƒJƒƒ‰‚Ìˆ—
 
-
-
+	float velocityY;
+	bool onGround_;
 
 };
 

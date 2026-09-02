@@ -77,10 +77,12 @@ namespace
 
 	};
 
+	const float G = 4.0f / 60.0f; // 重力
+	const float H = 64.0f * 0.1f;
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hWalkModel_(-1), hIdleModel_(-1) {
+	:GameObject(parent, "Player"), hWalkModel_(-1), hIdleModel_(-1), velocityY(0.0f) {
 	//swordDirには、初期方向として、ローカルモデルの剣の根っこから
 	//先端までのベクトルとして（0,1,0)を代入しておく
 	//初期位置は原点
@@ -104,6 +106,9 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	transform_.position_.y -= velocityY;
+	velocityY += G; // 1フレームの重力
+
 	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
 	XMVECTOR move = XMVectorSet(0, 0, 0, 0);
 	const float SPEED = 0.3;
@@ -142,6 +147,11 @@ void Player::Update()
 			//angle = 0.0f;
 			pDirection = PLAYER_DIRECTION::PLAYER_DOWN;
 			pState = PLAYER_STATE::PLAYER_WALK;
+		}
+
+		if (Input::IsKey(DIK_SPACE))
+		{
+			velocityY = -sqrtf(2 * G * H);
 		}
 	}
 
@@ -202,10 +212,10 @@ void Player::Update()
 	using std::vector;
 	vector<vector<int>> gmap = ground_->GetMapData();
 
-	XMFLOAT3 wPos = { -20.0f, 0.0f, 20.0f };
+	XMFLOAT3 wPos = { -20.0f, -26.0f, 0.0f };
 
 	int mapX = (transform_.position_.x - wPos.x) / 4;
-	int mapY = (-transform_.position_.y + wPos.y) / 4;
+	int mapY = (-transform_.position_.y - wPos.y) / 2;
 
 	Debug::Log("X = ");
 	Debug::Log(mapX, true);  //後ろのtrueは改行するかどうか
@@ -214,8 +224,21 @@ void Player::Update()
 
 	if (gmap[mapY][mapX] == 1)
 	{
+		onGround_ = true;
+		
+
 		pos  = pos - SPEED * move;
 		XMStoreFloat3(&transform_.position_, pos);
+		
+	}
+
+	if (velocityY >= 0.0f)
+	{
+		if (gmap[mapY][mapX] == 1)
+		{
+			velocityY = 0.0f;
+			transform_.position_.y = -(mapY * 2 + wPos.y);
+		}
 	}
 
 
