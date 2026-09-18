@@ -6,6 +6,7 @@
 #pragma comment(lib, "LibFbxSDK-MT.lib")
 #pragma comment(lib, "LibXml2-MT.lib")
 #pragma comment(lib, "zlib-MT.lib")
+#pragma comment(lib, "bcrypt.lib")
 
 Fbx::Fbx():_animSpeed(0)
 {

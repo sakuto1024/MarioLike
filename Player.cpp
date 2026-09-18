@@ -39,7 +39,7 @@ namespace
 	XMVectorSet(1, 0, 0, 0)
 	};
 
-	float TURN_FRAME = 30.0f;  //回転にかかるフレーム数宇
+	float TURN_FRAME = 1.0f;  //回転にかかるフレーム数宇
 
 	float turnStartAngle = 0.0f;  //回転開始時の角度を管理する変数
 	float turnEndAngle = 0.0f;  //回転終了時の角度を管理する変数
@@ -77,12 +77,12 @@ namespace
 
 	};
 
-	const float G = 4.0f / 60.0f; // 重力
-	const float H = 64.0f * 0.1f;
+	const float G = 3.0f / 60.0f; // 重力
+	const float H = 64.0f * 0.2f;
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hWalkModel_(-1), hIdleModel_(-1), velocityY(0.0f) {
+	:GameObject(parent, "Player"), hWalkModel_(-1), hIdleModel_(-1), velocityY(0.0f), onGround_(false) {
 	//swordDirには、初期方向として、ローカルモデルの剣の根っこから
 	//先端までのベクトルとして（0,1,0)を代入しておく
 	//初期位置は原点
@@ -136,22 +136,23 @@ void Player::Update()
 			pDirection = PLAYER_DIRECTION::PLAYER_RIGHT;
 			pState = PLAYER_STATE::PLAYER_WALK;
 		}
-		if (Input::IsKey(DIK_UP))
-		{
-			//angle = 180.0f;
-			pDirection = PLAYER_DIRECTION::PLAYER_UP;
-			pState = PLAYER_STATE::PLAYER_WALK;
-		}
-		if (Input::IsKey(DIK_DOWN))
-		{
-			//angle = 0.0f;
-			pDirection = PLAYER_DIRECTION::PLAYER_DOWN;
-			pState = PLAYER_STATE::PLAYER_WALK;
-		}
+		//if (Input::IsKey(DIK_UP))
+		//{
+		//	//angle = 180.0f;
+		//	pDirection = PLAYER_DIRECTION::PLAYER_UP;
+		//	pState = PLAYER_STATE::PLAYER_WALK;
+		//}
+		//if (Input::IsKey(DIK_DOWN))
+		//{
+		//	//angle = 0.0f;
+		//	pDirection = PLAYER_DIRECTION::PLAYER_DOWN;
+		//	pState = PLAYER_STATE::PLAYER_WALK;
+		//}
 
-		if (Input::IsKey(DIK_SPACE))
+		if (Input::IsKeyDown(DIK_SPACE) && onGround_)
 		{
 			velocityY = -sqrtf(2 * G * H);
+			onGround_ = false;
 		}
 	}
 
@@ -213,6 +214,7 @@ void Player::Update()
 	vector<vector<int>> gmap = ground_->GetMapData();
 
 	XMFLOAT3 wPos = { -20.0f, -26.0f, 0.0f };
+	
 
 	int mapX = (transform_.position_.x - wPos.x) / 4;
 	int mapY = (-transform_.position_.y - wPos.y) / 2;
@@ -222,14 +224,24 @@ void Player::Update()
 	Debug::Log("Y = ");
 	Debug::Log(mapY, true);  //後ろのtrueは改行するかどうか
 
-	if (gmap[mapY][mapX] == 1)
+	if (mapY - 1 >= 0)
 	{
-		onGround_ = true;
-		
+		if (gmap[mapY - 1][mapX] == 1)
+		{
+			pos = pos - SPEED * move;
+			XMStoreFloat3(&transform_.position_, pos);
+		}
+	}
 
-		pos  = pos - SPEED * move;
-		XMStoreFloat3(&transform_.position_, pos);
-		
+	if (velocityY < 0.0f)   
+	{
+		if (mapY - 2 >= 0)
+		{
+			if (gmap[mapY - 2][mapX] == 1)
+			{
+				velocityY = 0.0f;
+			}
+		}
 	}
 
 	if (velocityY >= 0.0f)
@@ -238,8 +250,16 @@ void Player::Update()
 		{
 			velocityY = 0.0f;
 			transform_.position_.y = -(mapY * 2 + wPos.y);
+
+			onGround_ = true;
+		}
+		else
+		{
+			onGround_ = false;
 		}
 	}
+
+
 
 
 	//---------------------------------------------------------------------------

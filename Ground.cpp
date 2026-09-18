@@ -101,11 +101,14 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	for (int k = 0; k < 5; k++)
+	for (int j = 0; j < 5; j++)
 	{
-		gt.position_ = { -4.0f + (40.0f * k), 0.0f, 8.0f };
-		Model::SetTransform(hModel_, gt);
-		Model::Draw(hModel_);
+		for (int i = 0; i < 5; i++)
+		{
+			gt.position_ = { -4.0f + (40.0f * j), -60.0f + (40.0f * i), 8.0f};
+			Model::SetTransform(hModel_, gt);
+			Model::Draw(hModel_);
+		}
 	}
 	
 
