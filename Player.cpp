@@ -4,6 +4,7 @@
 #include "Engine\\Input.h"
 #include "Engine\\Debug.h"
 #include "Ground.h"
+#include "MovingPlatform.h"
 #include <vector>
 #include "Engine/Camera.h"
 
@@ -214,6 +215,7 @@ void Player::Update()
 	vector<vector<int>> gmap = ground_->GetMapData();
 
 	XMFLOAT3 wPos = { -20.0f, -26.0f, 0.0f };
+	XMFLOAT3 mvPlatformPos = movingPlatform_->GetPosition();
 	
 
 	int mapX = (transform_.position_.x - wPos.x) / 4;
@@ -256,6 +258,12 @@ void Player::Update()
 		else
 		{
 			onGround_ = false;
+		}
+
+		if (transform_.position_.x >= mvPlatformPos.x - 0.5f && transform_.position_.x <= mvPlatformPos.x + 0.5f &&
+			transform_.position_.y >= mvPlatformPos.y - 0.5f && transform_.position_.y <= mvPlatformPos.y + 0.5f)
+		{
+			onGround_ = true;
 		}
 	}
 

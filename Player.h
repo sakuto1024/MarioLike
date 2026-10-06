@@ -5,6 +5,7 @@
 
 class Ground;  //前方宣言（ポインタだけでいいときは前方宣言でOK)
                //(Gound::～　とかやりたいときは前方宣言じゃダメ）
+class MovingPlatform;
 
 class Player : public GameObject
 {
@@ -31,6 +32,7 @@ private:
 	int hIdleModel_;  //待機アニメーションのモデルハンドル
 
 	Ground* ground_;//地面オブジェクトのポインタ
+	MovingPlatform* movingPlatform_;
 
 	int camType_;  //カメラの種類
 

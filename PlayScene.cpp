@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Food.h"
 #include "Ground.h"
+#include "MovingPlatform.h"
 #include <vector>
 #include "Engine/Camera.h"
 #include "Engine/Text.h"
@@ -30,9 +31,14 @@ void PlayScene::Initialize()
 		{
 			if (gmap[i][j] == 3)
 			{
+				movingPlatform_ = Instantiate<MovingPlatform>(this);
+				movingPlatform_->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 20.0f - (4.0f * i) + 5.0f, 0.0f });
+
 				player_ = Instantiate<Player>(this);
 				player_->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 20.0f - (4.0f * i), 0.0f });
 				player_->SetGround(ground_);
+
+			
 			}
 
 			if (gmap[i][j] == 4)
@@ -64,6 +70,8 @@ void PlayScene::Initialize()
 			//}
 		}
 	}
+
+	
 }
 
 void PlayScene::Update()

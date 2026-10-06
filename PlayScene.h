@@ -6,6 +6,7 @@ class Food;
 class Player;
 class Enemy;
 class Ground;
+class MovingPlatform;
 
 //テストシーンを管理するクラス
 class PlayScene : public GameObject
@@ -37,6 +38,7 @@ private:
 	Enemy* enemy_;
 	Food* food_;
 	Ground* ground_;
+	MovingPlatform* movingPlatform_;
 	int maxFoodP_;
 	int maxFoodN_;
 	int score_;
