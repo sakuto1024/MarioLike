@@ -16,7 +16,7 @@ void MovingPlatform::Initialize()
 
 void MovingPlatform::Update()
 {
-    pos_ = transform_.position_;
+   // pos_ = transform_.position_;
     oldPos_ = transform_.position_;
 
     if (isMoveRight_)
@@ -28,11 +28,11 @@ void MovingPlatform::Update()
         transform_.position_.x -= speed_;
     }
 
-    if (transform_.position_.x >= startPos_.x + moveRange_)
+    if (transform_.position_.x >= startPos_.x && isMoveRight_)
     {
         isMoveRight_ = false;
     }
-    else if (transform_.position_.x <= startPos_.x)
+    else if (transform_.position_.x <= startPos_.x - moveRange_ && !isMoveRight_)
     {
         isMoveRight_ = true;
     }
