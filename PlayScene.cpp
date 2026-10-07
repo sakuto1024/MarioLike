@@ -29,14 +29,18 @@ void PlayScene::Initialize()
 	{
 		for (int i = 0; i < ground_->GetMapHeight(); i++)
 		{
-			if (gmap[i][j] == 3)
+			if (gmap[i][j] == 10)
 			{
 				movingPlatform_ = Instantiate<MovingPlatform>(this);
-				movingPlatform_->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 20.0f - (4.0f * i) + 5.0f, 0.0f });
+				movingPlatform_->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 20.0f - (4.0f * i), 0.0f });
+			}
 
+			if (gmap[i][j] == 3)
+			{
 				player_ = Instantiate<Player>(this);
 				player_->SetPosition(XMFLOAT3{ -18.0f + (4.0f * j), 20.0f - (4.0f * i), 0.0f });
 				player_->SetGround(ground_);
+				player_->SetMovingPlatform(movingPlatform_);
 
 			
 			}

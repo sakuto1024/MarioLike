@@ -50,10 +50,12 @@ void MovingPlatform::Release()
 
 XMFLOAT3 MovingPlatform::GetPosition()
 {
-    return pos_;
+    return transform_.position_;
 }
 
 XMFLOAT3 MovingPlatform::GetMoveAmount()
 {
-    return XMFLOAT3();
+    return XMFLOAT3(transform_.position_.x - oldPos_.x,
+                    transform_.position_.y - oldPos_.y,
+                    transform_.position_.z - oldPos_.z);
 }

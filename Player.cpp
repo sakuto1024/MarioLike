@@ -216,6 +216,7 @@ void Player::Update()
 
 	XMFLOAT3 wPos = { -20.0f, -26.0f, 0.0f };
 	XMFLOAT3 mvPlatformPos = movingPlatform_->GetPosition();
+	XMFLOAT3 mvPlatformAmount = movingPlatform_->GetMoveAmount();
 	
 
 	int mapX = (transform_.position_.x - wPos.x) / 4;
@@ -260,10 +261,12 @@ void Player::Update()
 			onGround_ = false;
 		}
 
-		if (transform_.position_.x >= mvPlatformPos.x - 0.5f && transform_.position_.x <= mvPlatformPos.x + 0.5f &&
-			transform_.position_.y >= mvPlatformPos.y - 0.5f && transform_.position_.y <= mvPlatformPos.y + 0.5f)
+		if (transform_.position_.x >= mvPlatformPos.x - 2.0f && transform_.position_.x <= mvPlatformPos.x + 2.0f &&
+			transform_.position_.y >= mvPlatformPos.y - 0.5f && transform_.position_.y <= mvPlatformPos.y + 2.5f)
 		{
 			onGround_ = true;
+			transform_.position_.x += mvPlatformAmount.x;
+			velocityY = 0.0f;
 		}
 	}
 

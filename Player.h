@@ -26,6 +26,7 @@ public:
 	//開放
 	void Release() override;
 	void SetGround(Ground* ground) { ground_ = ground; }
+	void SetMovingPlatform(MovingPlatform* movingPlatform) { movingPlatform_ = movingPlatform; }
 
 private:
 	int hWalkModel_;  //歩きモーションのモデルハンドル
